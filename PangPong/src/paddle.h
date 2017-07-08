@@ -1,6 +1,8 @@
 #ifndef _PANGPONG_PADDLE_H_
 #define _PANGPONG_PADDLE_H_
 
+#include <cmath>
+
 #include <SDL.h>
 
 class Ball;
@@ -21,6 +23,8 @@ public:
 	void Render(SDL_Renderer * renderer);
 
 	int Predict(Ball * ball);
+
+	void AI(Ball * ball);
 
 public:
 	static const int PADDLE_WIDTH;

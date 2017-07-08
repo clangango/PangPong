@@ -80,6 +80,7 @@ void Ball::BouncesOff(Paddle * paddle)
 void Ball::Reset(int x, int y)
 {
 	state_ = READY;
+	speed_ = 8;
 	hits_ = 0;
 	angle_ = 0.0f;
 	x_ = x - BALL_SIZE / 2;

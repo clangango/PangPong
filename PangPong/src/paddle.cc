@@ -36,7 +36,7 @@ void Paddle::SetY(const int y)
 
 	if (y_ < 0)
 		y_ = 0;
-	if (y_ + Paddle::PADDLE_HEIGHT> Game::SCREEN_HEIGHT)
+	if (y_ + Paddle::PADDLE_HEIGHT > Game::SCREEN_HEIGHT)
 		y_ = Game::SCREEN_HEIGHT - PADDLE_HEIGHT;
 }
 
@@ -55,5 +55,35 @@ void Paddle::Render(SDL_Renderer * renderer)
 
 int Paddle::Predict(Ball * ball)
 {
-	return 0;
+	float slope = 0.0f;
+	if(ball->dx_ != 0)
+		slope = static_cast<float>(ball->dy_ / ball->dx_);
+	int paddle_distance = ball->x_ - x_;
+	int predicted_y = abs(-slope * paddle_distance + ball->y_);
+	int num_bounces = predicted_y / Game::SCREEN_HEIGHT;
+
+	if (num_bounces % 2 == 0)
+		predicted_y = predicted_y % Game::SCREEN_HEIGHT;
+	else
+		predicted_y = Game::SCREEN_HEIGHT - (predicted_y % Game::SCREEN_HEIGHT);
+
+	return predicted_y;
+}
+
+void Paddle::AI(Ball * ball)
+{
+	if (ball->x_ < Game::SCREEN_WIDTH / 2 && ball->dx_ < 0)
+	{
+		if (y_ - (PADDLE_HEIGHT - ball->BALL_SIZE) / 2 < ball->predicted_y_ - 8)
+			SetY(y_ += 5);
+		else if (y_ + (PADDLE_HEIGHT - ball->BALL_SIZE) / 2 > ball->predicted_y_ + 8)
+			SetY(y_ -= 5);
+	}
+	else if (ball->dx_ >= 0)
+	{
+		if (y_ + PADDLE_HEIGHT / 2 < Game::SCREEN_HEIGHT / 2)
+			y_ += 1;
+		else
+			y_ -= 1;
+	}
 }

@@ -36,6 +36,8 @@ public:
 	int speed_;
 	int hits_;
 
+	int predicted_y_;
+
 	float angle_;
 
 	bool bounce_;

@@ -108,6 +108,7 @@ void Game::HandleEvents()
 void Game::Update()
 {
 	player_->SetY(mouse_y_);
+	computer_->AI(ball_);
 	ball_->Update();
 
 	ball_->CheckWallCollision(0, SCREEN_HEIGHT);
@@ -120,6 +121,7 @@ void Game::Update()
 	{
 		ball_->BouncesOff(computer_);
 	}
+	ball_->predicted_y_ = computer_->Predict(ball_);
 
 	if (ball_->x_ < 0)
 	{
