@@ -24,6 +24,9 @@
     <ClCompile Include="src\paddle.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ball.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\libFLAC-8.dll" />
@@ -43,6 +46,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\paddle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

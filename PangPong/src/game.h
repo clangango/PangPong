@@ -4,6 +4,7 @@
 #include <SDL.h>
 
 #include "paddle.h"
+#include "ball.h"
 
 class Game
 {
@@ -34,6 +35,8 @@ private:
 
 	Paddle * player_;
 	Paddle * computer_;
+
+	Ball * ball_;
 
 	int player_score_;
 	int computer_score_;

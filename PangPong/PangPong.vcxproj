@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ball.cc" />
     <ClCompile Include="src\game.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\paddle.cc" />
@@ -146,6 +147,7 @@
     <None Include="bin\Debug\zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ball.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\paddle.h" />
   </ItemGroup>

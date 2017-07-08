@@ -1,6 +1,7 @@
 #include "paddle.h"
 
 #include "game.h"
+#include "ball.h"
 
 const int Paddle::PADDLE_WIDTH = 10;
 const int Paddle::PADDLE_HEIGHT = 60;
@@ -50,4 +51,9 @@ void Paddle::Render(SDL_Renderer * renderer)
 	SDL_RenderFillRect(renderer, &paddle);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
+}
+
+int Paddle::Predict(Ball * ball)
+{
+	return 0;
 }

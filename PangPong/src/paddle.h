@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+class Ball;
+
 class Paddle
 {
 public:
@@ -17,6 +19,8 @@ public:
 
 	void Update();
 	void Render(SDL_Renderer * renderer);
+
+	int Predict(Ball * ball);
 
 public:
 	static const int PADDLE_WIDTH;

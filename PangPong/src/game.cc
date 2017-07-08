@@ -8,10 +8,16 @@ const int Game::SCREEN_HEIGHT = 480;
 Game::Game()
 {
 	running_ = Init();
+
 	computer_ = new Paddle(40, SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2);
+
 	player_ = new Paddle(SCREEN_WIDTH - (40 + Paddle::PADDLE_WIDTH), 
 		SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2);
+
+	ball_ = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
 	mouse_y_ = SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2;
+
 	Reset();
 }
 
@@ -19,11 +25,13 @@ Game::~Game()
 {
 	delete player_;
 	delete computer_;
+	delete ball_;
 
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
 
+	ball_ = nullptr;
 	player_ = nullptr;
 	computer_ = nullptr;
 	renderer_ = nullptr;
@@ -73,6 +81,7 @@ void Game::Run()
 		HandleEvents();
 		Update();
 		Render();
+		SDL_Delay(1000 / 60);
 	}
 }
 
@@ -87,6 +96,11 @@ void Game::HandleEvents()
 			break;
 		case SDL_MOUSEMOTION:
 			SDL_GetMouseState(NULL, &mouse_y_);
+			break;
+		case SDL_KEYDOWN:
+			if (event_.key.keysym.sym == SDLK_SPACE)
+				if (ball_->state_ == Ball::READY || ball_->state_ == Ball::GAMEOVER)
+					ball_->state_ = Ball::LAUNCH;
 		}
 	}
 }
@@ -94,6 +108,32 @@ void Game::HandleEvents()
 void Game::Update()
 {
 	player_->SetY(mouse_y_);
+	ball_->Update();
+
+	ball_->CheckWallCollision(0, SCREEN_HEIGHT);
+
+	if (ball_->PaddleCollision(player_))
+	{
+		ball_->BouncesOff(player_);
+	}
+	else if (ball_->PaddleCollision(computer_))
+	{
+		ball_->BouncesOff(computer_);
+	}
+
+	if (ball_->x_ < 0)
+	{
+		player_score_++;
+		player_score_changed_ = true;
+		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	}
+
+	if (ball_->x_ > SCREEN_WIDTH - Ball::BALL_SIZE)
+	{
+		computer_score_++;
+		computer_score_changed_ = true;
+		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	}
 }
 
 void Game::Render()
@@ -104,6 +144,7 @@ void Game::Render()
 	RenderNet();
 	player_->Render(renderer_);
 	computer_->Render(renderer_);
+	ball_->Render(renderer_);
 
 	SDL_RenderPresent(renderer_);
 }
