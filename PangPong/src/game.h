@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+#include "paddle.h"
+
 class Game
 {
 public:
@@ -17,6 +19,9 @@ public:
 	void Render();
 	void Reset();
 
+private:
+	void RenderNet();
+
 public:
 	static const int SCREEN_WIDTH;
 	static const int SCREEN_HEIGHT;
@@ -27,11 +32,16 @@ private:
 
 	SDL_Event event_;
 
+	Paddle * player_;
+	Paddle * computer_;
+
 	int player_score_;
 	int computer_score_;
 
 	bool player_score_changed_;
 	bool computer_score_changed_;
+
+	int mouse_y_;
 
 	bool running_;
 };

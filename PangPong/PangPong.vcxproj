@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="src\game.cc" />
     <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\paddle.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\libFLAC-8.dll" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\paddle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

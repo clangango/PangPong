@@ -8,15 +8,24 @@ const int Game::SCREEN_HEIGHT = 480;
 Game::Game()
 {
 	running_ = Init();
+	computer_ = new Paddle(40, SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2);
+	player_ = new Paddle(SCREEN_WIDTH - (40 + Paddle::PADDLE_WIDTH), 
+		SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2);
+	mouse_y_ = SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2;
 	Reset();
 }
 
 Game::~Game()
 {
+	delete player_;
+	delete computer_;
+
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
 
+	player_ = nullptr;
+	computer_ = nullptr;
 	renderer_ = nullptr;
 	window_ = nullptr;
 }
@@ -52,6 +61,8 @@ bool Game::Init()
 		return false;
 	}
 
+	SDL_ShowCursor(SDL_DISABLE);
+
 	return true;
 }
 
@@ -74,13 +85,15 @@ void Game::HandleEvents()
 		case SDL_QUIT:
 			running_ = false;
 			break;
+		case SDL_MOUSEMOTION:
+			SDL_GetMouseState(NULL, &mouse_y_);
 		}
 	}
 }
 
 void Game::Update()
 {
-
+	player_->SetY(mouse_y_);
 }
 
 void Game::Render()
@@ -88,6 +101,9 @@ void Game::Render()
 	SDL_RenderClear(renderer_);
 
 	// drawing of the game in here
+	RenderNet();
+	player_->Render(renderer_);
+	computer_->Render(renderer_);
 
 	SDL_RenderPresent(renderer_);
 }
@@ -99,4 +115,15 @@ void Game::Reset()
 
 	player_score_changed_ = true;
 	computer_score_changed_ = true;
+}
+
+void Game::RenderNet()
+{
+	SDL_SetRenderDrawColor(renderer_, 127, 127, 127, 255);
+	for (int i = 0; i < SCREEN_HEIGHT; i += 15)
+	{
+		SDL_Rect dot = { SCREEN_WIDTH / 2 - 3, i, 6, 6 };
+		SDL_RenderFillRect(renderer_, &dot);
+	}
+	SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
 }
