@@ -18,6 +18,9 @@
     <ClCompile Include="src\main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\libFLAC-8.dll" />
@@ -31,5 +34,10 @@
     <None Include="bin\Debug\SDL2_ttf.dll" />
     <None Include="bin\Debug\smpeg2.dll" />
     <None Include="bin\Debug\zlib1.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

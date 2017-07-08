@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game.cc" />
     <ClCompile Include="src\main.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +143,9 @@
     <None Include="bin\Debug\SDL2_ttf.dll" />
     <None Include="bin\Debug\smpeg2.dll" />
     <None Include="bin\Debug\zlib1.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
