@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "helper.h"
+
 const int Game::SCREEN_WIDTH = 800;
 const int Game::SCREEN_HEIGHT = 480;
 
@@ -27,13 +29,20 @@ Game::~Game()
 	delete computer_;
 	delete ball_;
 
+	SDL_DestroyTexture(font_player_score_);
+	SDL_DestroyTexture(font_computer_score_);
+
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
 
+	font_player_score_ = nullptr;
+	font_computer_score_ = nullptr;
+
 	ball_ = nullptr;
 	player_ = nullptr;
 	computer_ = nullptr;
+
 	renderer_ = nullptr;
 	window_ = nullptr;
 }
@@ -70,6 +79,15 @@ bool Game::Init()
 	}
 
 	SDL_ShowCursor(SDL_DISABLE);
+
+	if (TTF_Init() < 0)
+	{
+		std::cout << "Font initialization error: " << TTF_GetError();
+		return false;
+	}
+
+	font_color_ = { 255, 0, 0, 255 };
+	font_name_ = "assets/fonts/Roboto-Black.ttf";
 
 	return true;
 }
@@ -147,6 +165,22 @@ void Game::Render()
 	player_->Render(renderer_);
 	computer_->Render(renderer_);
 	ball_->Render(renderer_);
+
+
+	if (player_score_changed_)
+	{
+		font_player_score_ = renderText(std::to_string(player_score_), font_name_, font_color_, 24, renderer_);
+		player_score_changed_ = false;
+	}
+	renderTexture(font_player_score_, renderer_, SCREEN_WIDTH - 60, 20);
+
+	if (computer_score_changed_)
+	{
+		font_computer_score_ = renderText(std::to_string(computer_score_), font_name_, font_color_, 24, renderer_);
+		computer_score_changed_ = false;
+	}
+	renderTexture(font_computer_score_, renderer_, 50, 20);
+
 
 	SDL_RenderPresent(renderer_);
 }

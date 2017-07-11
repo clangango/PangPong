@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="src\ball.cc" />
     <ClCompile Include="src\game.cc" />
+    <ClCompile Include="src\helper.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\paddle.cc" />
   </ItemGroup>
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="src\ball.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\helper.h" />
     <ClInclude Include="src\paddle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

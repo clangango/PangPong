@@ -74,7 +74,7 @@ void Paddle::AI(Ball * ball)
 {
 	if (ball->x_ < Game::SCREEN_WIDTH / 2 && ball->dx_ < 0)
 	{
-		if (y_ - (PADDLE_HEIGHT - ball->BALL_SIZE) / 2 < ball->predicted_y_ - 8)
+		if (y_ + (PADDLE_HEIGHT - ball->BALL_SIZE) / 2 < ball->predicted_y_ - 8)
 			SetY(y_ += 5);
 		else if (y_ + (PADDLE_HEIGHT - ball->BALL_SIZE) / 2 > ball->predicted_y_ + 8)
 			SetY(y_ -= 5);
