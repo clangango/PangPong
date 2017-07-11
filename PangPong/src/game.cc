@@ -84,7 +84,7 @@ bool Game::Init()
 		return false;
 	}
 
-	font_color_ = { 255, 0, 0, 255 };
+	font_color_ = { 255, 0, 0, SDL_ALPHA_OPAQUE };
 	font_name_ = "assets/fonts/Roboto-Black.ttf";
 
 	return true;
@@ -127,8 +127,6 @@ void Game::Update()
 	computer_->AI(ball_);
 	ball_->Update();
 
-	ball_->CheckWallCollision(0, SCREEN_HEIGHT);
-
 	if (ball_->PaddleCollision(player_))
 	{
 		ball_->BouncesOff(player_);
@@ -137,19 +135,18 @@ void Game::Update()
 	{
 		ball_->BouncesOff(computer_);
 	}
-	ball_->predicted_y_ = computer_->Predict(ball_);
 
 	if (ball_->x_ < 0)
 	{
-		player_score_++;
-		player_score_changed_ = true;
+		SDL_DestroyTexture(font_player_score_);
+		font_player_score_ = ScoreTexture(++player_score_);
 		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	}
 
 	if (ball_->x_ > SCREEN_WIDTH - Ball::BALL_SIZE)
 	{
-		computer_score_++;
-		computer_score_changed_ = true;
+		SDL_DestroyTexture(font_computer_score_);
+		font_computer_score_ = ScoreTexture(++computer_score_);
 		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	}
 }
@@ -160,25 +157,12 @@ void Game::Render()
 
 	// drawing of the game in here
 	RenderNet();
+	renderTexture(font_player_score_, renderer_, SCREEN_WIDTH - 60, 20);
+	renderTexture(font_computer_score_, renderer_, 50, 20);
+
 	player_->Render(renderer_);
 	computer_->Render(renderer_);
 	ball_->Render(renderer_);
-
-
-	if (player_score_changed_)
-	{
-		font_player_score_ = renderText(std::to_string(player_score_), font_name_, font_color_, 24, renderer_);
-		player_score_changed_ = false;
-	}
-	renderTexture(font_player_score_, renderer_, SCREEN_WIDTH - 60, 20);
-
-	if (computer_score_changed_)
-	{
-		font_computer_score_ = renderText(std::to_string(computer_score_), font_name_, font_color_, 24, renderer_);
-		computer_score_changed_ = false;
-	}
-	renderTexture(font_computer_score_, renderer_, 50, 20);
-
 
 	SDL_RenderPresent(renderer_);
 }
@@ -187,18 +171,24 @@ void Game::Reset()
 {
 	player_score_ = 0;
 	computer_score_ = 0;
-
-	player_score_changed_ = true;
-	computer_score_changed_ = true;
+	font_player_score_ = ScoreTexture(player_score_);
+	font_computer_score_ = ScoreTexture(computer_score_);
 }
 
 void Game::RenderNet()
 {
-	SDL_SetRenderDrawColor(renderer_, 127, 127, 127, 255);
+	SDL_SetRenderDrawColor(renderer_, 127, 127, 127, SDL_ALPHA_OPAQUE);
 	for (int i = 0; i < SCREEN_HEIGHT; i += 15)
 	{
 		SDL_Rect dot = { SCREEN_WIDTH / 2 - 3, i, 6, 6 };
 		SDL_RenderFillRect(renderer_, &dot);
 	}
-	SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
+}
+
+SDL_Texture * Game::ScoreTexture(int score)
+{
+	SDL_Texture * score_texture = renderText(std::to_string(score), 
+		font_name_, font_color_, 24, renderer_);
+	return score_texture;
 }

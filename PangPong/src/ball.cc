@@ -93,11 +93,14 @@ void Ball::Reset(int x, int y)
 
 void Ball::Update()
 {
-	UpdateSpeed();
+	
 	if (state_ == LAUNCH)
 	{
 		Launch();
 	}
+
+	UpdateSpeed();
+	CheckWallCollision(0, SCREEN_HEIGHT);
 
 	x_ += dx_;
 	y_ += dy_;

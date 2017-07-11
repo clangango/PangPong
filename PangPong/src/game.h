@@ -25,6 +25,7 @@ public:
 
 private:
 	void RenderNet();
+	SDL_Texture * ScoreTexture(int score);
 
 private:
 	SDL_Event event_;
@@ -40,8 +41,6 @@ private:
 	int computer_score_;
 
 	bool running_;
-	bool player_score_changed_;
-	bool computer_score_changed_;
 
 	std::string font_name_;
 
