@@ -27,8 +27,6 @@ public:
 	void AI(Ball * ball);
 
 public:
-	static const int PADDLE_WIDTH;
-	static const int PADDLE_HEIGHT;
 
 private:
 	int x_, y_;

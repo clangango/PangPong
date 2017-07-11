@@ -3,22 +3,20 @@
 #include <iostream>
 
 #include "helper.h"
-
-const int Game::SCREEN_WIDTH = 800;
-const int Game::SCREEN_HEIGHT = 480;
+#include "config.h"
 
 Game::Game()
 {
 	running_ = Init();
 
-	computer_ = new Paddle(40, SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2);
+	computer_ = new Paddle(40, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2);
 
-	player_ = new Paddle(SCREEN_WIDTH - (40 + Paddle::PADDLE_WIDTH), 
-		SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2);
+	player_ = new Paddle(SCREEN_WIDTH - (40 + PADDLE_WIDTH), 
+		SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2);
 
 	ball_ = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
-	mouse_y_ = SCREEN_HEIGHT / 2 - Paddle::PADDLE_HEIGHT / 2;
+	mouse_y_ = SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2;
 
 	Reset();
 }

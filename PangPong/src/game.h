@@ -25,11 +25,6 @@ public:
 
 private:
 	void RenderNet();
-	void AddScore(SDL_Texture & texture, int score);
-
-public:
-	static const int SCREEN_WIDTH;
-	static const int SCREEN_HEIGHT;
 
 private:
 	SDL_Event event_;

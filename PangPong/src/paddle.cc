@@ -1,10 +1,7 @@
 #include "paddle.h"
 
-#include "game.h"
+#include "config.h"
 #include "ball.h"
-
-const int Paddle::PADDLE_WIDTH = 10;
-const int Paddle::PADDLE_HEIGHT = 60;
 
 Paddle::Paddle(int x, int y)
 	: x_(x), y_(y)
@@ -36,8 +33,8 @@ void Paddle::SetY(const int y)
 
 	if (y_ < 0)
 		y_ = 0;
-	if (y_ + Paddle::PADDLE_HEIGHT > Game::SCREEN_HEIGHT)
-		y_ = Game::SCREEN_HEIGHT - PADDLE_HEIGHT;
+	if (y_ + PADDLE_HEIGHT > SCREEN_HEIGHT)
+		y_ = SCREEN_HEIGHT - PADDLE_HEIGHT;
 }
 
 void Paddle::Update()
@@ -60,19 +57,19 @@ int Paddle::Predict(Ball * ball)
 		slope = static_cast<float>(ball->dy_ / ball->dx_);
 	int paddle_distance = ball->x_ - x_;
 	int predicted_y = abs(-slope * paddle_distance + ball->y_);
-	int num_bounces = predicted_y / Game::SCREEN_HEIGHT;
+	int num_bounces = predicted_y / SCREEN_HEIGHT;
 
 	if (num_bounces % 2 == 0)
-		predicted_y = predicted_y % Game::SCREEN_HEIGHT;
+		predicted_y = predicted_y % SCREEN_HEIGHT;
 	else
-		predicted_y = Game::SCREEN_HEIGHT - (predicted_y % Game::SCREEN_HEIGHT);
+		predicted_y = SCREEN_HEIGHT - (predicted_y % SCREEN_HEIGHT);
 
 	return predicted_y;
 }
 
 void Paddle::AI(Ball * ball)
 {
-	if (ball->x_ < Game::SCREEN_WIDTH / 2 && ball->dx_ < 0)
+	if (ball->x_ < SCREEN_WIDTH / 2 && ball->dx_ < 0)
 	{
 		if (y_ + (PADDLE_HEIGHT - ball->BALL_SIZE) / 2 < ball->predicted_y_ - 8)
 			SetY(y_ += 5);
@@ -81,7 +78,7 @@ void Paddle::AI(Ball * ball)
 	}
 	else if (ball->dx_ >= 0)
 	{
-		if (y_ + PADDLE_HEIGHT / 2 < Game::SCREEN_HEIGHT / 2)
+		if (y_ + PADDLE_HEIGHT / 2 < SCREEN_HEIGHT / 2)
 			y_ += 1;
 		else
 			y_ -= 1;

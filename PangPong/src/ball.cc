@@ -3,6 +3,7 @@
 #include <cmath>
 #include <random>
 
+#include "config.h"
 #include "game.h"
 #include "paddle.h"
 
@@ -55,22 +56,22 @@ void Ball::CheckWallCollision(int min, int max)
 
 bool Ball::PaddleCollision(Paddle * paddle)
 {
-	if (paddle->GetX() < Game::SCREEN_WIDTH / 2)
-		return x_ < paddle->GetX() + Paddle::PADDLE_WIDTH
+	if (paddle->GetX() < SCREEN_WIDTH / 2)
+		return x_ < paddle->GetX() + PADDLE_WIDTH
 		&& x_ + BALL_SIZE > paddle->GetX()
 		&& y_ > paddle->GetY() - BALL_SIZE
-		&& y_ < paddle->GetY() + Paddle::PADDLE_HEIGHT;
+		&& y_ < paddle->GetY() + PADDLE_HEIGHT;
 	else
 		return x_ + BALL_SIZE > paddle->GetX()
-		&& x_ < paddle->GetX() + Paddle::PADDLE_WIDTH
+		&& x_ < paddle->GetX() + PADDLE_WIDTH
 		&& y_ > paddle->GetY() - BALL_SIZE
-		&& y_ < paddle->GetY() + Paddle::PADDLE_HEIGHT;
+		&& y_ < paddle->GetY() + PADDLE_HEIGHT;
 }
 
 void Ball::BouncesOff(Paddle * paddle)
 {
 	hits_++;
-	int sign = x_ < Game::SCREEN_WIDTH / 2 ? 1 : -1;
+	int sign = x_ < SCREEN_WIDTH / 2 ? 1 : -1;
 	int relY = y_ - paddle->GetY() + BALL_SIZE;
 	angle_ = 1.5f * relY - 75.0f;
 	dx_ = sign * speed_ * std::cos(angle_ * M_PI / 180.0f);
