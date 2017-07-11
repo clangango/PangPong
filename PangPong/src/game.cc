@@ -123,18 +123,9 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
-	player_->SetY(mouse_y_);
+	player_->Update(mouse_y_);
 	computer_->AI(ball_);
-	ball_->Update();
-
-	if (ball_->PaddleCollision(player_))
-	{
-		ball_->BouncesOff(player_);
-	}
-	else if (ball_->PaddleCollision(computer_))
-	{
-		ball_->BouncesOff(computer_);
-	}
+	ball_->Update(player_, computer_);
 
 	if (ball_->x_ < 0)
 	{

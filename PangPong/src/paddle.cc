@@ -37,8 +37,9 @@ void Paddle::SetY(const int y)
 		y_ = SCREEN_HEIGHT - PADDLE_HEIGHT;
 }
 
-void Paddle::Update()
+void Paddle::Update(const int mouse_y)
 {
+	SetY(mouse_y);
 }
 
 void Paddle::Render(SDL_Renderer * renderer)

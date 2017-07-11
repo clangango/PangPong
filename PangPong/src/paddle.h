@@ -19,7 +19,7 @@ public:
 	void SetX(const int x);
 	void SetY(const int y);
 
-	void Update();
+	void Update(const int mouse_y);
 	void Render(SDL_Renderer * renderer);
 
 	int Predict(Ball * ball);

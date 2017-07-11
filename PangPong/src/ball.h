@@ -18,7 +18,7 @@ public:
 	void BouncesOff(Paddle * paddle);
 	void Reset(int x, int y);
 
-	void Update();
+	void Update(Paddle * player, Paddle * computer);
 	void Render(SDL_Renderer * renderer);
 
 public:

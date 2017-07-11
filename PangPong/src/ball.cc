@@ -91,7 +91,7 @@ void Ball::Reset(int x, int y)
 	bounce_ = false;
 }
 
-void Ball::Update()
+void Ball::Update(Paddle * player, Paddle * computer)
 {
 	
 	if (state_ == LAUNCH)
@@ -101,6 +101,15 @@ void Ball::Update()
 
 	UpdateSpeed();
 	CheckWallCollision(0, SCREEN_HEIGHT);
+
+	if (PaddleCollision(player))
+	{
+		BouncesOff(player);
+	}
+	else if (PaddleCollision(computer))
+	{
+		BouncesOff(computer);
+	}
 
 	x_ += dx_;
 	y_ += dy_;
