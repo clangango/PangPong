@@ -27,13 +27,21 @@ Game::~Game()
 	delete computer_;
 	delete ball_;
 
+	if (font_game_over_)
+		SDL_DestroyTexture(font_game_over_);
+
+	SDL_DestroyTexture(font_launch_);
 	SDL_DestroyTexture(font_player_score_);
 	SDL_DestroyTexture(font_computer_score_);
+
+	TTF_Quit();
 
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
 
+	font_game_over_ = nullptr;
+	font_launch_ = nullptr;
 	font_player_score_ = nullptr;
 	font_computer_score_ = nullptr;
 
@@ -87,6 +95,10 @@ bool Game::Init()
 	font_color_ = { 255, 0, 0, SDL_ALPHA_OPAQUE };
 	font_name_ = "assets/fonts/Roboto-Black.ttf";
 
+	font_launch_ = renderText("Press SPACE to start", font_name_, 
+		font_color_, 16, renderer_);
+	SDL_QueryTexture(font_launch_, NULL, NULL, &launch_w_, &launch_h_);
+
 	return true;
 }
 
@@ -114,9 +126,16 @@ void Game::HandleEvents()
 			SDL_GetMouseState(NULL, &mouse_y_);
 			break;
 		case SDL_KEYDOWN:
+			if (event_.key.keysym.sym == SDLK_ESCAPE)
+				running_ = false;
 			if (event_.key.keysym.sym == SDLK_SPACE)
-				if (ball_->state_ == Ball::READY || ball_->state_ == Ball::GAMEOVER)
+				if (ball_->state_ == Ball::READY)
 					ball_->state_ = Ball::LAUNCH;
+				if (ball_->state_ == Ball::GAMEOVER)
+				{
+					Reset();
+					ball_->state_ = Ball::LAUNCH;
+				}
 		}
 	}
 }
@@ -132,6 +151,8 @@ void Game::Update()
 		SDL_DestroyTexture(font_player_score_);
 		font_player_score_ = ScoreTexture(++player_score_);
 		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+		if (player_score_ >= 5)
+			GameOver("PLAYER");
 	}
 
 	if (ball_->x_ > SCREEN_WIDTH - Ball::BALL_SIZE)
@@ -139,6 +160,8 @@ void Game::Update()
 		SDL_DestroyTexture(font_computer_score_);
 		font_computer_score_ = ScoreTexture(++computer_score_);
 		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+		if (computer_score_ >= 5)
+			GameOver("COMPUTER");
 	}
 }
 
@@ -154,6 +177,20 @@ void Game::Render()
 	player_->Render(renderer_);
 	computer_->Render(renderer_);
 	ball_->Render(renderer_);
+
+	if (ball_->state_ == Ball::READY)
+	{
+		renderTexture(font_launch_, renderer_, SCREEN_WIDTH / 2 - launch_w_ / 2, 
+			SCREEN_HEIGHT / 2 + (50 - launch_h_));
+	}
+
+	if (ball_->state_ == Ball::GAMEOVER)
+	{
+		renderTexture(font_game_over_, renderer_, 
+			SCREEN_WIDTH / 2 - gameover_w_ / 2, SCREEN_HEIGHT / 2 - 50);
+		renderTexture(font_launch_, renderer_, SCREEN_WIDTH / 2 - launch_w_ / 2,
+			SCREEN_HEIGHT / 2 + (50 - launch_h_));
+	}
 
 	SDL_RenderPresent(renderer_);
 }
@@ -175,6 +212,14 @@ void Game::RenderNet()
 		SDL_RenderFillRect(renderer_, &dot);
 	}
 	SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
+}
+
+void Game::GameOver(std::string winner)
+{
+	font_game_over_ = renderText(winner + " Wins!", font_name_, font_color_, 16,
+		renderer_);
+	SDL_QueryTexture(font_game_over_, NULL, NULL, &gameover_w_, &gameover_h_);
+	ball_->state_ = Ball::GAMEOVER;
 }
 
 SDL_Texture * Game::ScoreTexture(int score)

@@ -25,7 +25,9 @@ public:
 
 private:
 	void RenderNet();
+	void GameOver(std::string winner);
 	SDL_Texture * ScoreTexture(int score);
+
 
 private:
 	SDL_Event event_;
@@ -45,8 +47,14 @@ private:
 	std::string font_name_;
 
 	SDL_Color font_color_;
+
 	SDL_Texture * font_player_score_;
 	SDL_Texture * font_computer_score_;
+	SDL_Texture * font_launch_;
+	SDL_Texture * font_game_over_;
+
+	int launch_w_, launch_h_;
+	int gameover_w_, gameover_h_;
 };
 
 #endif

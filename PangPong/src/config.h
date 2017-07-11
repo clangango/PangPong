@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 520;
+const int SCREEN_HEIGHT = 480;
 
 const int PADDLE_WIDTH = 10;
 const int PADDLE_HEIGHT = 60;
