@@ -2,13 +2,14 @@
 #define _PANGPONG_BALL_H_
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "paddle.h"
 
 class Ball
 {
 public:
-	Ball(int x, int y);
+	Ball(int x, int y, Mix_Chunk * wall, Mix_Chunk * paddle);
 	~Ball();
 
 	void Launch();
@@ -44,6 +45,9 @@ public:
 
 private:
 	SDL_Rect ball;
+
+	Mix_Chunk * paddle_sound_;
+	Mix_Chunk * wall_sound_;
 };
 
 #endif

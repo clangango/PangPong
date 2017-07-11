@@ -1,8 +1,6 @@
 #ifndef _PANGPONG_CONFIG_H_
 #define _PANGPONG_CONFIG_H_
 
-#include <SDL.h>
-
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 480;
 

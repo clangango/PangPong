@@ -154,6 +154,11 @@
     <ClInclude Include="src\helper.h" />
     <ClInclude Include="src\paddle.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\sfx\ping_pong_8bit_beeep.wav" />
+    <Media Include="assets\sfx\ping_pong_8bit_peeeeeep.wav" />
+    <Media Include="assets\sfx\ping_pong_8bit_plop.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

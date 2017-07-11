@@ -5,6 +5,7 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #include "paddle.h"
 #include "ball.h"
@@ -52,6 +53,10 @@ private:
 	SDL_Texture * font_computer_score_;
 	SDL_Texture * font_launch_;
 	SDL_Texture * font_game_over_;
+
+	Mix_Chunk * sound_paddle_;
+	Mix_Chunk * sound_wall_;
+	Mix_Chunk * sound_score_;
 
 	int launch_w_, launch_h_;
 	int gameover_w_, gameover_h_;

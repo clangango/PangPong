@@ -14,7 +14,7 @@ Game::Game()
 	player_ = new Paddle(SCREEN_WIDTH - (40 + PADDLE_WIDTH), 
 		SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2);
 
-	ball_ = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	ball_ = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_wall_, sound_paddle_);
 
 	mouse_y_ = SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2;
 
@@ -36,9 +36,19 @@ Game::~Game()
 
 	TTF_Quit();
 
+	Mix_FreeChunk(sound_paddle_);
+	Mix_FreeChunk(sound_wall_);
+	Mix_FreeChunk(sound_score_);
+
+	Mix_CloseAudio();
+
 	SDL_DestroyRenderer(renderer_);
 	SDL_DestroyWindow(window_);
 	SDL_Quit();
+
+	sound_paddle_ = nullptr;
+	sound_wall_ = nullptr;
+	sound_score_ = nullptr;
 
 	font_game_over_ = nullptr;
 	font_launch_ = nullptr;
@@ -99,6 +109,16 @@ bool Game::Init()
 		font_color_, 16, renderer_);
 	SDL_QueryTexture(font_launch_, NULL, NULL, &launch_w_, &launch_h_);
 
+	if (Mix_OpenAudio(22500, MIX_DEFAULT_FORMAT, 2, 1024) < 0)
+	{
+		std::cout << "Audio initialization error: " << Mix_GetError();
+		return false;
+	}
+
+	sound_paddle_ = Mix_LoadWAV("assets/sfx/ping_pong_8bit_beeep.wav");
+	sound_wall_ = Mix_LoadWAV("assets/sfx/ping_pong_8bit_plop.wav");
+	sound_score_ = Mix_LoadWAV("assets/sfx/ping_pong_8bit_peeeeeep.wav");
+
 	return true;
 }
 
@@ -129,6 +149,7 @@ void Game::HandleEvents()
 			if (event_.key.keysym.sym == SDLK_ESCAPE)
 				running_ = false;
 			if (event_.key.keysym.sym == SDLK_SPACE)
+			{
 				if (ball_->state_ == Ball::READY)
 					ball_->state_ = Ball::LAUNCH;
 				if (ball_->state_ == Ball::GAMEOVER)
@@ -136,6 +157,7 @@ void Game::HandleEvents()
 					Reset();
 					ball_->state_ = Ball::LAUNCH;
 				}
+			}
 		}
 	}
 }
@@ -148,6 +170,7 @@ void Game::Update()
 
 	if (ball_->x_ < 0)
 	{
+		Mix_PlayChannel(-1, sound_score_, 0);
 		SDL_DestroyTexture(font_player_score_);
 		font_player_score_ = ScoreTexture(++player_score_);
 		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -157,6 +180,7 @@ void Game::Update()
 
 	if (ball_->x_ > SCREEN_WIDTH - Ball::BALL_SIZE)
 	{
+		Mix_PlayChannel(-1, sound_score_, 0);
 		SDL_DestroyTexture(font_computer_score_);
 		font_computer_score_ = ScoreTexture(++computer_score_);
 		ball_->Reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);

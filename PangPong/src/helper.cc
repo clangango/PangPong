@@ -13,19 +13,19 @@ void renderTexture(SDL_Texture* texture, SDL_Renderer* renderer,
 void renderTexture(SDL_Texture* texture, SDL_Renderer* renderer,
 	int x, int y, SDL_Rect* clip)
 {
-	SDL_Rect dst;
-	dst.x = x;
-	dst.y = y;
+	SDL_Rect destR;
+	destR.x = x;
+	destR.y = y;
 	if (clip != nullptr)
 	{
-		dst.w = clip->w;
-		dst.h = clip->h;
+		destR.w = clip->w;
+		destR.h = clip->h;
 	}
 	else
 	{
-		SDL_QueryTexture(texture, nullptr, nullptr, &dst.w, &dst.h);
+		SDL_QueryTexture(texture, nullptr, nullptr, &destR.w, &destR.h);
 	}
-	renderTexture(texture, renderer, dst, clip);
+	renderTexture(texture, renderer, destR, clip);
 }
 
 SDL_Texture* renderText(const std::string &message, const std::string &fontFile,

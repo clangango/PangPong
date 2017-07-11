@@ -14,15 +14,22 @@ namespace {
 
 const int Ball::BALL_SIZE = 15;
 
-Ball::Ball(int x, int y)
+Ball::Ball(int x, int y, Mix_Chunk * wall, Mix_Chunk * paddle)
 	: x_(x), y_(y)
 {
 	speed_ = 8;
 	Reset(x, y);
+	paddle_sound_ = paddle;
+	wall_sound_ = wall;
 }
 
 Ball::~Ball()
 {
+	Mix_FreeChunk(wall_sound_);
+	Mix_FreeChunk(paddle_sound_);
+
+	wall_sound_ = nullptr;
+	paddle_sound_ = nullptr;
 }
 
 void Ball::Launch()
@@ -51,7 +58,10 @@ void Ball::UpdateSpeed()
 void Ball::CheckWallCollision(int min, int max)
 {
 	if ((y_ + dy_) < min || (y_ + BALL_SIZE + dy_) >= max)
+	{
 		dy_ = -dy_;
+		Mix_PlayChannel(-1, wall_sound_, 0);
+	}
 }
 
 bool Ball::PaddleCollision(Paddle * paddle)
@@ -105,10 +115,12 @@ void Ball::Update(Paddle * player, Paddle * computer)
 	if (PaddleCollision(player))
 	{
 		BouncesOff(player);
+		Mix_PlayChannel(-1, paddle_sound_, 0);
 	}
 	else if (PaddleCollision(computer))
 	{
 		BouncesOff(computer);
+		Mix_PlayChannel(-1, paddle_sound_, 0);
 	}
 
 	x_ += dx_;
